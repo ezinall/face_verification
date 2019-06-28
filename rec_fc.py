@@ -1,4 +1,5 @@
 import os
+import time
 
 import cv2 as cv
 import face_recognition
@@ -18,8 +19,23 @@ def main():
 
     cap = cv.VideoCapture(0)
 
+    cap.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc(*"MJPG"))
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, 620)
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+    cap.set(cv.CAP_PROP_FPS, 30.0)
+
+    start = time.time()
+    num_frames = 0
+
     while True:
         ret, frame = cap.read()
+
+        if int(time.time() - start) == 1:
+            start = time.time()
+            print('FPS: ', num_frames)
+            num_frames = 0
+        else:
+            num_frames += 1
 
         flip = cv.flip(frame, 1)
 
